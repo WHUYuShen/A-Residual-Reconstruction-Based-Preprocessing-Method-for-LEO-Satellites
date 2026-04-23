@@ -15,4 +15,7 @@ Release/
 *.obj
 *.log
 *_output
+grac*_output
+grad*_output
+omc_*
 *.exe

@@ -1,17 +1,43 @@
 ﻿# A Residual Reconstruction Based Preprocessing Method for LEO Satellites
 
-This repository contains a Visual Studio C++ implementation for preprocessing LEO satellite observation log data using OMC residual information.
+This repository contains the C++ implementation associated with the paper **基于观测残差重构的低轨卫星 GNSS 数据预处理方法**. The method, named **Recheck**, is designed for onboard GNSS data preprocessing in low-Earth-orbit (LEO) satellite precise orbit determination.
 
-The program reads ambiguity/deletion records from a LOG file, matches them with OMC data by PRN and station, detects missing epochs and residual jumps, then reconstructs updated ambiguity records for downstream processing.
+## Background
 
-## Main Features
+LEO satellites move quickly and often produce short, discontinuous onboard GNSS observation arcs. Conventional preprocessing methods based on Melbourne-Wubbena (MW) and Geometry-Free (GF) combinations may mistakenly mark valid observations as cycle slips or outliers, especially near the beginning and end of daily observation arcs. These false deletions reduce observation continuity and can affect precise orbit determination accuracy.
 
-- Reads OMC records and groups them by satellite PRN and station.
-- Parses LOG ambiguity/deletion intervals while preserving the original header.
-- Detects missing epochs in observation intervals.
-- Detects residual jumps using a configurable threshold.
-- Reconstructs AMB/DEL records and updates ambiguity statistics in the output LOG file.
-- Provides console statistics for maximum ambiguity count in a single epoch.
+## Method Overview
+
+The Recheck method introduces simplified dynamic orbit determination results into the conventional preprocessing workflow. It reconstructs observed-minus-calculated (OMC) residuals by combining:
+
+- satellite orbit information,
+- onboard GNSS receiver clock estimates,
+- ambiguity estimates,
+- original GNSS observations.
+
+The reconstructed residual sequence is then used as a new detection quantity for cycle-slip and outlier rechecking. Previously deleted observations are inspected again, and valid data are restored where the residuals and ambiguity consistency satisfy the configured thresholds.
+
+## Implementation
+
+The Visual Studio C++ program in this repository:
+
+- reads OMC records and groups them by satellite PRN and station,
+- parses LOG ambiguity/deletion intervals while preserving the original header,
+- detects missing epochs in observation intervals,
+- detects residual jumps using a configurable threshold,
+- reconstructs AMB/DEL records and updates ambiguity statistics in the output LOG file,
+- prints diagnostic statistics for the maximum ambiguity count in a single epoch.
+
+## Experimental Context
+
+The paper evaluates the method using GRACE-C and GRACE-D onboard GNSS observations from 2022 DOY 189 to DOY 196 with a 10-second sampling interval. The results show that Recheck can restore valid observations without introducing obvious additional noise.
+
+Key reported results include:
+
+- average full-day visible-satellite increase: **2.81%**,
+- average increase within the first and last 60 epochs of each day: **1.6 satellites**, with an increase rate of **9.65%**,
+- improved radial, along-track, and cross-track orbit residuals,
+- accuracy improvements exceeding **20%** in some weak-observation segments.
 
 ## Project Structure
 
@@ -31,7 +57,7 @@ Task2/
 
 Open `Task2.sln` in Visual Studio and build the `Task2` project.
 
-## Notes
+## Usage Notes
 
 The current source code uses fixed local file paths for input and output files. Before running the program on another machine, update the following variables in `Task2/mission1.cpp`:
 
@@ -40,6 +66,12 @@ LOG_FILE
 OMC_FILE
 OUTPUT_FILE
 ```
+
+The repository intentionally excludes local Visual Studio files, build outputs, generated output logs, and large local OMC data files.
+
+## Keywords
+
+GNSS, LEO satellites, observation residuals, OMC reconstruction, cycle-slip detection, precise orbit determination, GRACE-C, GRACE-D.
 
 ## License
 
