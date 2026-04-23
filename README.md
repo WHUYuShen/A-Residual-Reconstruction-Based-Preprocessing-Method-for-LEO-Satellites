@@ -1,4 +1,4 @@
-﻿# A Residual Reconstruction Based Preprocessing Method for LEO Satellites
+# A Residual Reconstruction Based Preprocessing Method for LEO Satellites
 
 This repository contains the C++ implementation associated with the paper **基于观测残差重构的低轨卫星 GNSS 数据预处理方法**. The method, named **Recheck**, is designed for onboard GNSS data preprocessing in low-Earth-orbit (LEO) satellite precise orbit determination.
 
@@ -57,18 +57,23 @@ Task2/
 
 Open `Task2.sln` in Visual Studio and build the `Task2` project.
 
-## Usage Notes
+## Usage
 
-The current source code uses fixed local file paths for input and output files. Before running the program on another machine, update the following variables in `Task2/mission1.cpp`:
+After building the project, run the executable with three command-line arguments:
 
-```cpp
-LOG_FILE
-OMC_FILE
-OUTPUT_FILE
+```powershell
+Task2.exe <input_log_file> <input_omc_file> <output_log_file>
 ```
 
-The repository intentionally excludes local Visual Studio files, build outputs, generated output logs, and large local OMC data files.
+Example:
 
+```powershell
+Task2.exe grac1970.19o.log_orig omc_2019197 grac1970.19o_output
+```
+
+The program no longer depends on fixed local file paths. Input and output paths are supplied at runtime.
+
+The repository intentionally excludes local Visual Studio files, build outputs, generated output logs, and large local OMC data files.
 ## Keywords
 
 GNSS, LEO satellites, observation residuals, OMC reconstruction, cycle-slip detection, precise orbit determination, GRACE-C, GRACE-D.

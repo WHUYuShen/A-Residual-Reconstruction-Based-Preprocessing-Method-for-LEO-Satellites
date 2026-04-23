@@ -15,11 +15,11 @@ using namespace std;
 
 
 
-// ==================== 全局文件名（固定路径） ====================
+// ==================== 全局文件名（由命令行参数指定） ====================
 
-string LOG_FILE = "D://xwechat_files//wxid_ku43fizhzl7l22_253f//msg//file//2025-11//grac1970.19o.log_orig";     // 输入 LOG
-string OMC_FILE = "D://xwechat_files//wxid_ku43fizhzl7l22_253f//msg//file//2025-11//omc_2019197";               // 输入 OMC
-string OUTPUT_FILE = "D://xwechat_files//wxid_ku43fizhzl7l22_253f//msg//file//2025-11//grac1970.19o_output";    // 输出 LOG
+string LOG_FILE;      // 输入 LOG
+string OMC_FILE;      // 输入 OMC
+string OUTPUT_FILE;   // 输出 LOG
 
 const double JUMP_THRESHOLD = 0.3; // 周跳阈值
 
@@ -706,9 +706,18 @@ void writeOutput(const vector<LogRecord>& records, vector<string> logHeader) {
 
 // ==================== main：使用命令行参数 ====================
 
-// ==================== main：使用固定文件路径 ====================
+// ==================== main：从命令行读取文件路径 ====================
 
-int main() {
+int main(int argc, char* argv[]) {
+    if (argc != 4) {
+        cerr << "Usage: " << argv[0] << " <input_log_file> <input_omc_file> <output_log_file>" << endl;
+        return 1;
+    }
+
+    LOG_FILE = argv[1];
+    OMC_FILE = argv[2];
+    OUTPUT_FILE = argv[3];
+
     cout << "=== OMC数据更新程序 ===" << endl;
     cout << "输入 LOG 文件 : " << LOG_FILE << endl;
     cout << "输入 OMC 文件 : " << OMC_FILE << endl;
